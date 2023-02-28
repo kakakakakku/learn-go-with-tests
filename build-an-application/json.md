@@ -19,7 +19,7 @@ package main
 import (
     "fmt"
     "net/http"
-	"strings"
+    "strings"
 )
 
 type PlayerStore interface {
@@ -32,7 +32,7 @@ type PlayerServer struct {
 }
 
 func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	player := strings.TrimPrefix(r.URL.Path, "/players/")
+    player := strings.TrimPrefix(r.URL.Path, "/players/")
 
     switch r.Method {
     case http.MethodPost:
@@ -90,8 +90,7 @@ import (
 
 func main() {
     server := &PlayerServer{NewInMemoryPlayerStore()}
-
-	log.Fatal(http.ListenAndServe(":5000", server))
+    log.Fatal(http.ListenAndServe(":5000", server))
 }
 ```
 
@@ -157,7 +156,7 @@ func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     }))
 
     router.Handle("/players/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		player := strings.TrimPrefix(r.URL.Path, "/players/")
+        player := strings.TrimPrefix(r.URL.Path, "/players/")
 
         switch r.Method {
         case http.MethodPost:
@@ -198,7 +197,7 @@ func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *PlayerServer) playersHandler(w http.ResponseWriter, r *http.Request) {
-	player := strings.TrimPrefix(r.URL.Path, "/players/")
+    player := strings.TrimPrefix(r.URL.Path, "/players/")
 
     switch r.Method {
     case http.MethodPost:
@@ -266,7 +265,7 @@ func NewPlayerServer(store PlayerStore) *PlayerServer {
 
 そして、`server_test.go`, `server_integration_test.go`, `main.go` 内の `server := &PlayerServer{&store}` を `server := NewPlayerServer(&store)` に置き換えてみてください。
 
-最後に、`func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request)`が不要になったので、**delete** が不要になったので、**削除**してください。
+最後に、`func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request)`が不要になったので、**削除**してください。
 
 ## 埋め込み
 
@@ -297,7 +296,7 @@ type Animal interface {
 
 埋め込む型のすべてのパブリックメソッドとフィールドを公開するため、埋め込み型には注意する必要があります。私たちの場合、\(`http.Handler`\)を公開したい _interface_ だけを埋め込んだので問題ありません。
 
-怠惰で埋め込まれた`http.ServeMux`ではなく具象型でも機能しますが、`Handle(path、handler)`が原因で、`PlayerServer`のユーザーはサーバーに新しいルートを追加できます公開する。
+怠惰で埋め込まれた`http.ServeMux`ではなく具象型でも機能しますが、`Handle(path, handler)`が公開されるので、`PlayerServer`のユーザーはサーバーに新しいルートを追加できます。
 
 **型を埋め込むときは、公開APIにどのような影響があるかをよく考えてください**
 
@@ -349,7 +348,7 @@ func TestLeague(t *testing.T) {
 }
 ```
 
-### SON文字列をテストしないのはなぜですか？
+### JSON文字列をテストしないのはなぜですか？
 
 より単純な最初のステップは、応答の本文に特定のJSON文字列があることを表明することだと主張できます。
 
@@ -388,7 +387,7 @@ JSONを解析してデータモデルにするには、 `encoding/json`パッケ
 
 JSONの解析が失敗する可能性があるため、`Decode`が`error`を返す可能性があります。それが失敗した場合にテストを続行する意味はないので、エラーを確認し、エラーが発生した場合は `t.Fatalf`でテストを停止します。テストを実行している誰かが解析できない文字列を確認することが重要であるため、エラーとともに応答本文を表示することに注意してください。
 
-## Try to run the test
+## テストを実行してみます
 
 ```text
 === RUN   TestLeague/it_returns_200_on_/league
