@@ -21,6 +21,7 @@
 * [コンテキスト](go-fundamentals/context.md)
 * [プロパティベースのテスト概要](go-fundamentals/roman-numerals.md)
 * [数学](go-fundamentals/math.md)
+* [ファイルの読み取り](go-fundamentals/reading-files.md)
 
 ## アプリケーションを構築する <a id="build-an-application"></a>
 
