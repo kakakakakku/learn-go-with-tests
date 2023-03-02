@@ -239,7 +239,7 @@ func (f *FileSystemPlayerStore) GetLeague() []Player {
 
 テストは成功するはずです。
 
-## Refactor
+## リファクタリング♪
 
 これは以前に行ったことです！
 サーバーのテストコードは、応答からJSONをデコードする必要がありました。
@@ -292,7 +292,7 @@ type Reader interface {
 //file_system_store_test.go
 
 // read again
-got := store.GetLeague()
+got = store.GetLeague()
 assertLeague(t, got, want)
 ```
 
@@ -309,7 +309,7 @@ type ReadSeeker interface {
 }
 ```
 
-埋め込みを覚えていますか？これは、`Reader`と[`Seeker`]（https://golang.org/pkg/io/#Seeker）で構成されるインターフェースです。
+埋め込みを覚えていますか？これは、`Reader`と[`Seeker`](https://golang.org/pkg/io/#Seeker)で構成されるインターフェースです。
 
 ```go
 type Seeker interface {
@@ -467,7 +467,7 @@ type FileSystemPlayerStore struct {
 func createTempFile(t testing.TB, initialData string) (io.ReadWriteSeeker, func()) {
 	t.Helper()
 
-    tmpfile, err := ioutil.TempFile("", "db")
+    tmpfile, err := os.CreateTemp("", "db")
 
     if err != nil {
         t.Fatalf("could not create temp file %v", err)
@@ -484,7 +484,7 @@ func createTempFile(t testing.TB, initialData string) (io.ReadWriteSeeker, func(
 }
 ```
 
-[TempFile](https://golang.org/pkg/io/ioutil/#TempDir)は、使用する一時ファイルを作成します。渡した `"db"`値は、作成するランダムなファイル名に付けられるプレフィックスです。これは、誤って他のファイルと衝突しないようにするためです。
+[CreateTemp](https://pkg.go.dev/os#CreateTemp) は、使用する一時ファイルを作成します。渡した `"db"`値は、作成するランダムなファイル名に付けられるプレフィックスです。これは、誤って他のファイルと衝突しないようにするためです。
 
 `ReadWriteSeeker`（ファイル）だけでなく、関数も返すことに気づくでしょう。
 テストが終了したら、ファイルを確実に削除する必要があります。エラーが発生しやすく、読者の興味をそそる可能性があるため、ファイルの詳細をテストに漏らしたくない。`removeFile`関数を返すことで、ヘルパーの詳細を処理でき、呼び出し側が実行する必要があるのは`defer cleanDatabase()`を実行することだけです。
@@ -596,13 +596,13 @@ func (f *FileSystemPlayerStore) RecordWin(name string) {
 
 なぜ私が「`player.Wins++`」ではなく「`league[i].Wins++`」をしているのか、疑問に思われるかもしれません。
 
-スライス上で「範囲`range`」を指定すると、ループの現在のインデックス（この場合は`i`）とそのインデックスにある要素の_copy_が返されます。コピーの`Wins`値を変更しても、繰り返し処理する`league`スライスには影響しません。そのため、`league[i]`を実行して実際の値への参照を取得し、代わりにその値を変更する必要があります。
+スライス上で「範囲`range`」を指定すると、ループの現在のインデックス（この場合は`i`）とそのインデックスにある要素の _copy_ が返されます。コピーの`Wins`値を変更しても、繰り返し処理する`league`スライスには影響しません。そのため、`league[i]`を実行して実際の値への参照を取得し、代わりにその値を変更する必要があります。
 
 テストを実行すると、テストは成功するはずです。
 
 ## リファクタリング♪
 
-`GetPlayerScore`と`RecordWin`では、名前でプレーヤーを見つけるために`[] Player`を繰り返し処理しています。
+`GetPlayerScore`と`RecordWin`では、名前でプレーヤーを見つけるために`[]Player`を繰り返し処理しています。
 
 `FileSystemStore`の内部でこの共通コードをリファクタリングすることもできますが、私には、これが新しいタイプに引き上げることができるおそらく有用なコードであると感じています。これまで「リーグ`"League"`」での作業は常に`[]Player`で行っていましたが、`League`という新しいタイプを作成できます。これは、他の開発者が理解しやすくなり、そのタイプに便利なメソッドをアタッチして使用できるようになります。
 
@@ -886,7 +886,7 @@ func TestTape_Write(t *testing.T) {
     tape.Write([]byte("abc"))
 
     file.Seek(0, 0)
-    newFileContents, _ := ioutil.ReadAll(file)
+    newFileContents, _ := io.ReadAll(file)
 
     got := string(newFileContents)
     want := "abc"
@@ -1001,7 +1001,7 @@ type ReadWriteSeekTruncate interface {
 }
 ```
 
-しかし、これは本当に私たちに何を与えているのでしょうか？私たちは_モックではない_ことを覚えておいてください。**ファイルシステム**ストアが `*os.File`以外のタイプを取ることは非現実的であるため、インターフェイスが提供するポリモーフィズムは必要ありません。
+しかし、これは本当に私たちに何を与えているのでしょうか？私たちは _モックではない_ ことを覚えておいてください。**ファイルシステム**ストアが `*os.File`以外のタイプを取ることは非現実的であるため、インターフェイスが提供するポリモーフィズムは必要ありません。
 
 ここにあるように、タイプを切り刻んで変更し、実験することを恐れないでください。静的に型付けされた言語を使用することの素晴らしい点は、コンパイラーがすべての変更を支援することです。
 
