@@ -21,6 +21,7 @@
 * [コンテキスト](go-fundamentals/context.md)
 * [プロパティベースのテスト概要](go-fundamentals/roman-numerals.md)
 * [数学](go-fundamentals/math.md)
+* [テンプレート](go-fundamentals/html-templates.md)
 
 ## アプリケーションを構築する <a id="build-an-application"></a>
 
