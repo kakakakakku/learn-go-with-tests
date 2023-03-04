@@ -10,7 +10,7 @@ description: Error types
 
 `Gopher Slack`の`Pedro`が尋ねる
 
-> `fmt.Errorf("%s is foo、got%s"、bar、baz)`のようなエラーを作成している場合、文字列値を比較せずに同等性をテストする方法はありますか？
+> `fmt.Errorf("%s must be foo, got %s", bar, baz)` のようなエラーを作成している場合、文字列値を比較せずに同等性をテストする方法はありますか？
 
 このアイデアを探索するのに役立つ関数を作りましょう。
 
@@ -28,7 +28,7 @@ func DumbGetter(url string) (string, error) {
     }
 
     defer res.Body.Close()
-    body, _ := ioutil.ReadAll(res.Body) // ignoring err for brevity
+    body, _ := io.ReadAll(res.Body) // ignoring err for brevity
 
     return string(body), nil
 }
