@@ -21,6 +21,7 @@
 * [コンテキスト](go-fundamentals/context.md)
 * [プロパティベースのテスト概要](go-fundamentals/roman-numerals.md)
 * [数学](go-fundamentals/math.md)
+* [ジェネリクスを使用した配列とスライスの再検討](go-fundamentals/revisiting-arrays-and-slices-with-generics.md)
 
 ## アプリケーションを構築する <a id="build-an-application"></a>
 
